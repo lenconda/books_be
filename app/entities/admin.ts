@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, BaseEntity } from 'typeorm';
 
 @Entity({ name: 'bk_admins' })
-export default class Admin {
-  @PrimaryGeneratedColumn({ type: 'int' })
-  uuid: number;
+export default class Admin extends BaseEntity {
+  @PrimaryColumn({ type: 'varchar' })
+  uuid: string;
 
   @Column({ type: 'varchar', length: 16 })
   username: string;

@@ -23,6 +23,7 @@ const connection: Connection = connectionManager.create({
   entities: [
     path.resolve(__dirname, './entities/*.ts'),
   ],
+  synchronize: true,
 });
 
 connection.connect().then(() => {
@@ -50,7 +51,7 @@ connection.connect().then(() => {
   useContainer(Container);
   useKoaServer(app, {
     routePrefix: '/api',
-    controllers: [__dirname + '/modules/*.controller.{ts,js}'],
+    controllers: [__dirname + '/modules/**/*.controller.{ts,js}'],
     middlewares: [__dirname + '/middlewares/*.{ts,js}'],
     authorizationChecker: async (action: Action) => validateToken(action.request.headers['authorization']),
     currentUserChecker: async (action: Action) => getUserIDByToken(action.request.headers['authorization']).uuid,

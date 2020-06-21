@@ -1,8 +1,8 @@
-import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, OneToMany, BaseEntity } from 'typeorm';
 import ReaderBook from './reader_book';
 
 @Entity({ name: 'bk_books' })
-export default class Book {
+export default class Book extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: 13 })
   isbn: string;
 

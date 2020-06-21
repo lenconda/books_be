@@ -1,9 +1,9 @@
-import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, BaseEntity } from 'typeorm';
 import Book from './book';
 import Reader from './reader';
 
 @Entity({ name: 'bk_reader_book' })
-export default class ReaderBook {
+export default class ReaderBook extends BaseEntity {
   @PrimaryColumn({ type: 'varchar', length: 32 })
   uuid: string;
 

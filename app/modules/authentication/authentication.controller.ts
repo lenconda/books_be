@@ -12,9 +12,8 @@ export default class HelloController {
   service: AuthenticationService
 
   @Post('/login')
-  async login(@BodyParam('email') email: string,
-              @BodyParam('password') password: string): Promise<any> {
-    const result = await this.service.login(email, password);
+  async login(@BodyParam('username') username: string, @BodyParam('password') password: string): Promise<any> {
+    const result = await this.service.login(username, password);
     return result;
   }
 }
