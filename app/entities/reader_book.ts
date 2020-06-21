@@ -8,7 +8,7 @@ export default class ReaderBook extends BaseEntity {
   uuid: string;
 
   @ManyToOne(type => Reader, reader => reader.readerBooks, { cascade: true })
-  @JoinColumn({ name: 'uuid' })
+  @JoinColumn({ name: 'id_card' })
   reader: string;
 
   @ManyToOne(type => Book, book => book.readerBooks, { cascade: true })

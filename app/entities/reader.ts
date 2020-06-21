@@ -3,8 +3,8 @@ import ReaderBook from './reader_book';
 
 @Entity({ name: 'bk_readers' })
 export default class Reader extends BaseEntity {
-  @PrimaryColumn({ type: 'varchar', length: 32 })
-  uuid: string;
+  @PrimaryColumn({ name: 'id_card', type: 'varchar', length: 18 })
+  idCard: string;
 
   @Column({ type: 'varchar', length: 16 })
   name: string;
