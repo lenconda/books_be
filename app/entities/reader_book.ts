@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, BaseEntity } from 'typeorm';
+import { Entity, Column, PrimaryColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, BaseEntity, OneToMany } from 'typeorm';
 import Book from './book';
 import Reader from './reader';
+import Punishment from './punishment';
 
 @Entity({ name: 'bk_reader_book' })
 export default class ReaderBook extends BaseEntity {
@@ -20,6 +21,9 @@ export default class ReaderBook extends BaseEntity {
 
   @Column({ type: 'int' })
   returned: number;
+
+  @OneToMany(type => Punishment, punishment => punishment.record)
+  punishments: Punishment[];
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
