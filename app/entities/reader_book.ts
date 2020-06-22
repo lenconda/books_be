@@ -16,10 +16,11 @@ export default class ReaderBook extends BaseEntity {
   @JoinColumn({ name: 'isbn' })
   book: string;
 
-  @Column({ name: 'return_date', type: 'date' })
+  @Column({ name: 'return_date', type: 'datetime' })
   returnDate: Date;
 
-  @Column({ type: 'int' })
+  // 0 未归还 1 已归还
+  @Column({ type: 'int', default: 0 })
   returned: number;
 
   @OneToMany(type => Punishment, punishment => punishment.record)

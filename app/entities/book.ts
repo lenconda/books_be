@@ -9,7 +9,7 @@ export default class Book extends BaseEntity {
   @Column({ type: 'varchar', length: 16 })
   name: string;
 
-  @Column({ type: 'date', default: null, name: 'publish_date' })
+  @Column({ type: 'datetime', default: null, name: 'publish_date' })
   publishDate: Date;
 
   @Column({ type: 'varchar', length: 128, default: null })
