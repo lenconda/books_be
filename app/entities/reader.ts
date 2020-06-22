@@ -9,6 +9,8 @@ export default class Reader extends BaseEntity {
   @Column({ type: 'varchar', length: 16 })
   name: string;
 
+  // 为避免性别歧视的嫌疑，默认性别缺省值为 null
+  // 0=男，1=女
   @Column({ type: 'int', default: null })
   gender: number;
 
