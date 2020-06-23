@@ -10,11 +10,11 @@ export default class ReaderBook extends BaseEntity {
 
   @ManyToOne(type => Reader, reader => reader.readerBooks, { cascade: true })
   @JoinColumn({ name: 'id_card' })
-  reader: string;
+  reader: Reader;
 
   @ManyToOne(type => Book, book => book.readerBooks, { cascade: true })
   @JoinColumn({ name: 'isbn' })
-  book: string;
+  book: Book;
 
   @Column({ name: 'return_date', type: 'datetime' })
   returnDate: Date;

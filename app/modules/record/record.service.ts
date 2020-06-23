@@ -40,8 +40,8 @@ export default class RecordService {
 
       const readerBook = new ReaderBook();
       readerBook.uuid = uuid();
-      readerBook.reader = idCard;
-      readerBook.book = isbn;
+      readerBook.reader = reader;
+      readerBook.book = book;
       readerBook.returnDate = returnDate;
 
       await this.readerBookRepository.insert(readerBook);
@@ -80,7 +80,7 @@ export default class RecordService {
    */
   async detail(uuid: string): Promise<any> {
     try {
-      const result = await this.readerBookRepository.findOne({ uuid }, { relations: ['punishments'] });
+      const result = await this.readerBookRepository.findOne({ uuid }, { relations: ['punishments', 'reader', 'book'] });
       return {
         ...result,
         amount: (Date.parse(result.returnDate.toString()) < Date.now() && !result.returned) ? punishment(result.returnDate) : 0,

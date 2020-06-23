@@ -122,7 +122,7 @@ export default class BookService {
       const items = [];
       for (const item of result) {
         const lent = await this.readerBookRepository.findAndCount({
-          where: { isbn: item.isbn, returned: 0 },
+          where: { book: item.isbn, returned: 0 },
         });
         items.push({
           ...result,

@@ -7,7 +7,7 @@ export default class Punishment extends BaseEntity {
   uuid: string;
 
   @ManyToOne(type => ReaderBook, readerBook => readerBook.uuid)
-  record: string;
+  record: ReaderBook;
 
   @Column({ type: 'int', nullable: false })
   amount: number;
