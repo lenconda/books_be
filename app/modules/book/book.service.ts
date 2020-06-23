@@ -33,15 +33,17 @@ export default class BookService {
     publishDate: Date = null,
     cover: string = null,
     author: string = null,
+    count = 0,
     publisher: string = null,
   ): Promise<any> {
     try {
       const book = new Book();
       book.isbn = isbn;
       book.name = name;
-      book.publishDate = publishDate;
+      book.publish_date = publishDate;
       book.cover = cover;
       book.author = author;
+      book.count = count;
       book.publisher = publisher;
 
       await this.bookRepository.insert(book);
@@ -90,12 +92,12 @@ export default class BookService {
   async detail(isbn: string): Promise<any> {
     try {
       const result = await this.bookRepository.findOne({ isbn });
-      const lent = await this.readerBookRepository.findAndCount({
-        where: { isbn, returned: 0 },
+      const [items, total] = await this.readerBookRepository.findAndCount({
+        where: { book: isbn, returned: 0 },
       });
       return {
         ...result,
-        lent_count: lent,
+        lent_count: total,
       };
     } catch (e) {
       throw new BadRequestError(this.message.query(false, e.message || e.error.message));
@@ -108,7 +110,7 @@ export default class BookService {
    * @param page 页码
    * @param size 每页大小
    */
-  async query(query: Record<string, any>, page = 1, size = 10) {
+  async query(query: Record<string, any>, page = 1, size = 10): Promise<any> {
     try {
       const options = Object.keys(query).reduce((result: Record<string, FindOperator<string>>, key: string) => {
         result[key] = Like(`%${query[key]}%`);
@@ -119,17 +121,17 @@ export default class BookService {
         take: size,
         skip: (page - 1) * size,
       });
-      const items = [];
+      const books = [];
       for (const item of result) {
-        const lent = await this.readerBookRepository.findAndCount({
+        const [items, total] = await this.readerBookRepository.findAndCount({
           where: { book: item.isbn, returned: 0 },
         });
-        items.push({
-          ...result,
-          lent_count: lent,
+        books.push({
+          ...item,
+          lent_count: total,
         });
       }
-      return { items, total };
+      return { items: books, total };
     } catch (e) {
       throw new BadRequestError(this.message.query(false, e.message || e.error.message));
     }

@@ -25,10 +25,11 @@ export default class BookController {
     @BodyParam('publish_date') publishDate: string,
     @BodyParam('cover') cover: string,
     @BodyParam('author') author: string,
+    @BodyParam('count') count: number,
     @BodyParam('publisher') publisher: string,
   ): Promise<any> {
     const parsedPublishDate = publishDate ? new Date(publishDate) : null;
-    const result = await this.service.add(isbn, name, parsedPublishDate, cover, author, publisher);
+    const result = await this.service.add(isbn, name, parsedPublishDate, cover, author, count, publisher);
     return result;
   }
 

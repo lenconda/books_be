@@ -1,5 +1,4 @@
 import { Service } from 'typedi';
-import { StatusMessage } from '../../utils/messages';
 import {
   BadRequestError,
   NotFoundError,
@@ -13,7 +12,6 @@ import { getRepository, Repository } from 'typeorm';
 export default class PunishmentService {
   private readerBookRepository: Repository<ReaderBook>;
   private punishmentRepository: Repository<Punishment>;
-  private message = new StatusMessage('滞纳金');
 
   constructor() {
     this.readerBookRepository = getRepository(ReaderBook);

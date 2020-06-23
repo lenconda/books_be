@@ -32,7 +32,7 @@ export default class ReaderService {
   ): Promise<any> {
     try {
       const reader = new Reader();
-      reader.idCard = idCard;
+      reader.id_card = idCard;
       reader.name = name;
       reader.gender = gender;
       reader.address = address;
@@ -57,7 +57,7 @@ export default class ReaderService {
     }
 
     try {
-      const result = await this.readerRepository.update({ idCard }, updateInfo);
+      const result = await this.readerRepository.update({ id_card: idCard }, updateInfo);
       return result;
     } catch (e) {
       throw new BadRequestError(this.message.edit(false, e.message || e.error.message));
@@ -70,7 +70,7 @@ export default class ReaderService {
    */
   async delete(idCard: string): Promise<any> {
     try {
-      await this.readerRepository.delete({ idCard });
+      await this.readerRepository.delete({ id_card: idCard });
       return this.message.delete(true);
     } catch (e) {
       throw new BadRequestError(this.message.delete(false, e.message || e.error.message));
@@ -83,7 +83,7 @@ export default class ReaderService {
    */
   async detail(idCard: string): Promise<any> {
     try {
-      const result = await this.readerRepository.findOne({ idCard });
+      const result = await this.readerRepository.findOne({ id_card: idCard });
       return result;
     } catch (e) {
       throw new BadRequestError(this.message.query(false, e.message || e.error.message));

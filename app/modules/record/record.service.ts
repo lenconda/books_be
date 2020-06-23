@@ -32,7 +32,7 @@ export default class RecordService {
   async lend(isbn: string, idCard: string, returnDate: Date): Promise<any> {
     try {
       const book = await this.bookRepository.findOne({ isbn });
-      const reader = await this.readerRepository.findOne({ idCard });
+      const reader = await this.readerRepository.findOne({ id_card: idCard });
 
       if (!book || !reader) {
         throw new NotFoundError('图书借出失败，未找到图书或读者');
@@ -42,7 +42,7 @@ export default class RecordService {
       readerBook.uuid = uuid();
       readerBook.reader = reader;
       readerBook.book = book;
-      readerBook.returnDate = returnDate;
+      readerBook.return_date = returnDate;
 
       await this.readerBookRepository.insert(readerBook);
 
@@ -65,7 +65,7 @@ export default class RecordService {
       }
 
       readerBook.returned = 1;
-      readerBook.returnDate = new Date();
+      readerBook.return_date = new Date();
       readerBook.save();
 
       return readerBook;
@@ -83,7 +83,7 @@ export default class RecordService {
       const result = await this.readerBookRepository.findOne({ uuid }, { relations: ['punishments', 'reader', 'book'] });
       return {
         ...result,
-        amount: (Date.parse(result.returnDate.toString()) < Date.now() && !result.returned) ? punishment(result.returnDate) : 0,
+        amount: (Date.parse(result.return_date.toString()) < Date.now() && !result.returned) ? punishment(result.return_date) : 0,
         paid: !result.punishments.length ? 0 : result.punishments.reduce((total, current) => {
           const amount = total + current.amount;
           return amount;
