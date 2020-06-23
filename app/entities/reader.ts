@@ -4,7 +4,7 @@ import ReaderBook from './reader_book';
 @Entity({ name: 'bk_readers' })
 export default class Reader extends BaseEntity {
   @PrimaryColumn({ name: 'id_card', type: 'varchar', length: 18 })
-  idCard: string;
+  id_card: string;
 
   @Column({ type: 'varchar', length: 16 })
   name: string;
@@ -21,11 +21,11 @@ export default class Reader extends BaseEntity {
   phone: string;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updated_at: Date;
 
-  @OneToMany(type => ReaderBook, readerBook => readerBook.reader)
-  readerBooks: ReaderBook[];
+  @OneToMany(type => ReaderBook, readerBook => readerBook.reader, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  reader_books: ReaderBook[];
 }

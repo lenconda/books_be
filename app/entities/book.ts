@@ -10,7 +10,7 @@ export default class Book extends BaseEntity {
   name: string;
 
   @Column({ type: 'datetime', default: null, name: 'publish_date' })
-  publishDate: Date;
+  publish_date: Date;
 
   @Column({ type: 'varchar', length: 128, default: null })
   cover: string;
@@ -21,15 +21,15 @@ export default class Book extends BaseEntity {
   @Column({ type: 'varchar', length: 128, default: null })
   publisher: string;
 
-  @Column({ type: 'int', nullable: false })
+  @Column({ type: 'int', default: 0 })
   count: number;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ name: 'updated_at' })
-  updatedAt: Date;
+  updated_at: Date;
 
-  @OneToMany(type => ReaderBook, readerBook => readerBook.reader)
-  readerBooks: ReaderBook[];
+  @OneToMany(type => ReaderBook, readerBook => readerBook.reader, { onDelete: 'CASCADE', onUpdate: 'CASCADE' })
+  reader_books: ReaderBook[];
 }
