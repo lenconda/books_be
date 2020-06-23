@@ -21,6 +21,9 @@ export default class Book extends BaseEntity {
   @Column({ type: 'varchar', length: 128, default: null })
   publisher: string;
 
+  @Column({ type: 'int', nullable: false })
+  count: number;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
 

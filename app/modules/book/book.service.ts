@@ -4,17 +4,18 @@ import {
   BadRequestError,
 } from 'routing-controllers';
 import Book from '../../entities/book';
-import Reader from '../../entities/reader';
 import ReaderBook from '../../entities/reader_book';
 import { getRepository, Repository, Like, FindOperator } from 'typeorm';
 
 @Service()
 export default class BookService {
   private bookRepository: Repository<Book>;
+  private readerBookRepository: Repository<ReaderBook>;
   private message = new StatusMessage('图书');
 
   constructor() {
     this.bookRepository = getRepository(Book);
+    this.readerBookRepository = getRepository(ReaderBook);
   }
 
   /**
@@ -89,7 +90,13 @@ export default class BookService {
   async detail(isbn: string): Promise<any> {
     try {
       const result = await this.bookRepository.findOne({ isbn });
-      return result;
+      const lent = await this.readerBookRepository.findAndCount({
+        where: { isbn, returned: 0 },
+      });
+      return {
+        ...result,
+        lent_count: lent,
+      };
     } catch (e) {
       throw new BadRequestError(this.message.query(false, e.message || e.error.message));
     }
@@ -112,10 +119,17 @@ export default class BookService {
         take: size,
         skip: (page - 1) * size,
       });
-      return {
-        items: result,
-        total,
-      };
+      const items = [];
+      for (const item of result) {
+        const lent = await this.readerBookRepository.findAndCount({
+          where: { isbn: item.isbn, returned: 0 },
+        });
+        items.push({
+          ...result,
+          lent_count: lent,
+        });
+      }
+      return { items, total };
     } catch (e) {
       throw new BadRequestError(this.message.query(false, e.message || e.error.message));
     }
