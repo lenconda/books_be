@@ -7,6 +7,7 @@ import Book from '../../entities/book';
 import Reader from '../../entities/reader';
 import ReaderBook from '../../entities/reader_book';
 import { uuid } from '../../utils/uuid';
+import { punishment } from '../../utils/punishment';
 import { getRepository, Repository, Like, FindOperator } from 'typeorm';
 
 @Service()
@@ -80,7 +81,14 @@ export default class RecordService {
   async detail(uuid: string): Promise<any> {
     try {
       const result = await this.readerBookRepository.findOne({ uuid }, { relations: ['punishments'] });
-      return result;
+      return {
+        ...result,
+        amount: (Date.parse(result.returnDate.toString()) < Date.now() && !result.returned) ? punishment(result.returnDate) : 0,
+        paid: !result.punishments.length ? 0 : result.punishments.reduce((total, current) => {
+          const amount = total + current.amount;
+          return amount;
+        }, 0),
+      };
     } catch (e) {
       throw new BadRequestError(this.message.query(false, e.message || e.error.message));
     }
