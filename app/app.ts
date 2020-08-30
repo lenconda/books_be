@@ -3,7 +3,7 @@ import kcors from 'kcors';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import logger from 'koa-logger';
-import { validateToken, getUserIDByToken } from './utils/authorization';
+import { validateToken, getUserByToken } from './utils/authorization';
 import { useKoaServer, useContainer, Action } from 'routing-controllers';
 import { Container } from 'typedi';
 import config from './config';
@@ -54,7 +54,7 @@ connection.connect().then(() => {
     controllers: [__dirname + '/modules/**/*.controller.{ts,js}'],
     middlewares: [__dirname + '/middlewares/*.{ts,js}'],
     authorizationChecker: async (action: Action) => validateToken(action.request.headers['authorization']),
-    currentUserChecker: async (action: Action) => getUserIDByToken(action.request.headers['authorization']).uuid,
+    currentUserChecker: async (action: Action) => getUserByToken(action.request.headers['authorization']),
     defaults: {
       paramOptions: { required: false },
     },

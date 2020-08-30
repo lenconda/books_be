@@ -14,9 +14,8 @@ export const regenerateToken = (token: string): string => {
   return generateToken(payload, true);
 };
 
-export const getUserIDByToken = (raw: string): any => {
+export const getUserByToken = (token: string): any => {
   try {
-    const token = raw.substring(7) || '';
     const decoded = jwt.verify(token, 'books');
     return decoded;
   } catch (e) {
@@ -24,9 +23,8 @@ export const getUserIDByToken = (raw: string): any => {
   }
 };
 
-export const validateToken = (raw: string): boolean => {
+export const validateToken = (token: string): boolean => {
   try {
-    const token = raw.substring(7) || '';
     jwt.verify(token, 'books');
     return true;
   } catch (e) {
