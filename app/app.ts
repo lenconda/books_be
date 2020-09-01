@@ -53,8 +53,8 @@ connection.connect().then(() => {
     routePrefix: '/api',
     controllers: [__dirname + '/modules/**/*.controller.{ts,js}'],
     middlewares: [__dirname + '/middlewares/*.{ts,js}'],
-    authorizationChecker: async (action: Action) => validateToken(action.request.headers['authorization']),
-    currentUserChecker: async (action: Action) => getUserByToken(action.request.headers['authorization']),
+    authorizationChecker: async (action: Action) => validateToken(action.request.headers['authorization'].substring(7)),
+    currentUserChecker: async (action: Action) => getUserByToken(action.request.headers['authorization'].substring(7)),
     defaults: {
       paramOptions: { required: false },
     },
