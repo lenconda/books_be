@@ -8,7 +8,8 @@ import Reader from '../../entities/reader';
 import ReaderBook from '../../entities/reader_book';
 import { uuid } from '../../utils/uuid';
 import { punishment } from '../../utils/punishment';
-import { getRepository, Repository, Like, FindOperator } from 'typeorm';
+import { getRepository, Repository, Like, FindOperator, Between } from 'typeorm';
+import moment from 'moment';
 
 @Service()
 export default class RecordService {
@@ -103,13 +104,21 @@ export default class RecordService {
   async query(query: Record<string, any>, page = 1, size = 10) {
     try {
       const options = Object.keys(query).reduce((result: Record<string, FindOperator<string>>, key: string) => {
-        result[key] = Like(`%${query[key]}%`);
+        if (Array.isArray(query[key]) && query[key].length === 2) {
+          const [ start, end ] = query[key];
+          const realStart = moment(start).utc(false).startOf('day').toISOString();
+          const realEnd = moment(end).utc(false).add(2, 'day').startOf('day').toISOString();
+          result[key] = Between(realStart, realEnd);
+        } else {
+          result[key] = Like(`%${query[key]}%`);
+        }
         return result;
       }, {});
       const [result, total] = await this.readerBookRepository.findAndCount({
         where: options,
         take: size,
         skip: (page - 1) * size,
+        relations: ['punishments', 'reader', 'book'],
       });
       return {
         items: result,
