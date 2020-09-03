@@ -60,6 +60,9 @@ export default class ReaderService {
       const result = await this.readerRepository.update({ id_card: idCard }, updateInfo);
       return result;
     } catch (e) {
+      if (e instanceof BadRequestError) {
+        throw e;
+      }
       throw new BadRequestError(this.message.edit(false, e.message || e.error.message));
     }
   }

@@ -39,6 +39,9 @@ export default class PunishmentService {
 
       return punishment;
     } catch (e) {
+      if (e instanceof NotFoundError) {
+        throw e;
+      }
       throw new BadRequestError('缴纳滞纳金失败');
     }
   }

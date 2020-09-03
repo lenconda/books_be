@@ -68,6 +68,9 @@ export default class BookService {
       const result = await this.bookRepository.update({ isbn }, updateInfo);
       return result;
     } catch (e) {
+      if (e instanceof BadRequestError) {
+        throw e;
+      }
       throw new BadRequestError(this.message.edit(false, e.message || e.error.message));
     }
   }

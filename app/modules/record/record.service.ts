@@ -49,6 +49,9 @@ export default class RecordService {
 
       return readerBook;
     } catch (e) {
+      if (e instanceof NotFoundError) {
+        throw e;
+      }
       throw new BadRequestError('图书借出失败');
     }
   }
