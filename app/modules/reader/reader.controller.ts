@@ -41,6 +41,15 @@ export default class ReaderController {
     return result;
   }
 
+  @Post('/search')
+  @Authorized()
+  async search(
+    @BodyParam('keyword') keyword: string,
+  ) {
+    const result = await this.service.search(keyword);
+    return result;
+  }
+
   @Patch('/:id_card')
   @Authorized()
   async edit(@Param('id_card') idCard: string, @Body() updateInfo: Record<string, any>) {

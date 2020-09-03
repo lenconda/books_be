@@ -136,4 +136,30 @@ export default class BookService {
       throw new BadRequestError(this.message.query(false, e.message || e.error.message));
     }
   }
+
+  /**
+   * 简易搜索符合条件的所有图书信息
+   * @param keyword 查询内容
+   */
+  async search(keyword: string) {
+    try {
+      if (!keyword) {
+        return { items: [] };
+      }
+
+      const options = ['name', 'isbn', 'author', 'publisher'].map(option =>
+        ({ [option]: Like(`%${keyword}%`) }),
+      );
+
+      const items = await this.bookRepository.find({
+        where: options,
+      });
+
+      return {
+        items,
+      };
+    } catch (e) {
+      throw new BadRequestError(this.message.query(false, e.message || e.error.message));
+    }
+  }
 }

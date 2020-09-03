@@ -44,6 +44,15 @@ export default class BookController {
     return result;
   }
 
+  @Post('/search')
+  @Authorized()
+  async search(
+    @BodyParam('keyword') keyword: string,
+  ) {
+    const result = await this.service.search(keyword);
+    return result;
+  }
+
   @Patch('/:isbn')
   @Authorized()
   async edit(@Param('isbn') isbn: string, @Body() updateInfo: Record<string, any>) {

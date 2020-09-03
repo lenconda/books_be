@@ -115,4 +115,30 @@ export default class ReaderService {
       throw new BadRequestError(this.message.query(false, e.message || e.error.message));
     }
   }
+
+  /**
+   * 简易搜索符合条件的所有读者信息
+   * @param keyword 查询内容
+   */
+  async search(keyword: string) {
+    try {
+      if (!keyword) {
+        return { items: [] };
+      }
+
+      const options = ['name', 'id_card', 'phone'].map(option =>
+        ({ [option]: Like(`%${keyword}%`) }),
+      );
+
+      const items = await this.readerRepository.find({
+        where: options,
+      });
+
+      return {
+        items,
+      };
+    } catch (e) {
+      throw new BadRequestError(this.message.query(false, e.message || e.error.message));
+    }
+  }
 }
