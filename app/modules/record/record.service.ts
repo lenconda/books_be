@@ -39,6 +39,10 @@ export default class RecordService {
         throw new NotFoundError('图书借出失败，未找到图书或读者');
       }
 
+      if (book.count === 0) {
+        throw new BadRequestError('图书库存不足，无法借出');
+      }
+
       const readerBook = new ReaderBook();
       readerBook.uuid = uuid();
       readerBook.reader = reader;
@@ -46,10 +50,12 @@ export default class RecordService {
       readerBook.return_date = returnDate;
 
       await this.readerBookRepository.insert(readerBook);
+      book.count = book.count - 1;
+      await book.save();
 
       return readerBook;
     } catch (e) {
-      if (e instanceof NotFoundError) {
+      if (e instanceof NotFoundError || e instanceof BadRequestError) {
         throw e;
       }
       throw new BadRequestError('图书借出失败');
@@ -62,7 +68,7 @@ export default class RecordService {
    */
   async return(uuid: string): Promise<any> {
     try {
-      const readerBook = await this.readerBookRepository.findOne({ uuid });
+      const readerBook = await this.readerBookRepository.findOne({ uuid }, { relations: ['book'] });
 
       if (!readerBook) {
         throw new NotFoundError('未找到此借阅记录');
@@ -72,8 +78,13 @@ export default class RecordService {
       readerBook.return_date = new Date();
       readerBook.save();
 
+      const book = readerBook.book;
+      book.count = book.count + 1;
+      await book.save();
+
       return '图书归还成功';
     } catch (e) {
+      console.log(e);
       if (e instanceof NotFoundError) {
         throw e;
       }
