@@ -72,7 +72,7 @@ export default class RecordService {
       readerBook.return_date = new Date();
       readerBook.save();
 
-      return readerBook;
+      return '图书归还成功';
     } catch (e) {
       if (e instanceof NotFoundError) {
         throw e;
